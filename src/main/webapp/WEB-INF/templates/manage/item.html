@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <form th:action="@{/goods/findAllItem(page=1,size=8)}" id="listform" method="get">
+        <div class="padding border-bottom">
+            <ul class="search" style="padding-left: 10px;">
+                <li>
+                    <a class="button border-main icon-plus-square-o" th:href="@{/goods/toAddItem}">添加商品</a>
+                </li>
+                <li>
+                    <input type="text" placeholder="请输入商品名称" name="name" id="value" class="input"
+                           style="width: 250px;line-height: 17px;display: inline-block" />
+                    <a href="javascript:void(0)" onclick="changeSearch()" class="button border-main icon-search">搜索</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+    <table class="table table-hover text-center">
+        <tr>
+            <th>商品名称</th>
+            <th>商品主图</th>
+            <th>商品价格</th>
+            <th>商品折扣</th>
+            <th>商品一级分类</th>
+            <th>商品二级分类</th>
+            <th>操作</th>
+        </tr>
+
+            <tr th:each="item:${info.list}">
+                <td>[[${item.name}]]</td>
+                <td><img th:src="${item.url1}" alt="" style="width: 100px;height: 100px;"></td>
+                <td>[[${item.price}]]</td>
+                <td>[[${item.zk}]] 折</td>
+                <td>[[${item.category1Level.name}]]</td>
+                <td>[[${item.category2Level.name}]]</td>
+                <td>
+                    <a class="button border-main" href=""><span class="icon-edit">修改</span> </a>
+                    <a class="button border-red" th:href="@{/goods/deleteItem(id=${item.id})}"><span class="icon-trash-o">下架</span> </a>
+                </td>
+
+            </tr>
+
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+                    <!--分页开始-->
+                    共 [[${info.pages}]] 页，
+                    共 [[${info.total}]] 记录，
+                    当前第 [[${info.pageNum}]] 页
+
+                    <a th:href="@{/goods/findAllItem(page=1,size=8)}">首页</a>
+
+                    <a th:href="@{/goods/findAllItem(page=${info.pageNum - 1},size=20)}">上一页</a>
+                    <a th:value="${info.pageNum + 1}" href="javascript:search()">下一页</a>
+
+
+                    <a th:href="@{/goods/findAllItem(page=${info.pages},size=20)}" >尾页</a>
+
+<!--                    <span th:value="1" onclick="search()">首页</span>-->
+
+<!--                    <span th:value="${info.pageNum - 1}" onclick="search()">上一页</span>-->
+<!--                    <span th:value="${info.pageNum + 1}" onclick="search()">下一页</span>-->
+                    
+<!--                    <span th:value="${info.pages}" onclick="search()">尾页</span>-->
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function changeSearch(){
+        $("#listform").submit();
+    }
+</script>
+
+<script>
+
+    function search(){
+        let page = $(this).text();
+        let value = $("#value").val();
+        // let page = $(this).text();
+
+        console.log(value);
+        console.log(page);
+
+        location.href="/goods/findAllItem?page="+page+"&size=8&name="+value+"";
+    }
+
+</script>
+</body>
+
+</html>

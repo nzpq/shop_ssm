@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.shop.UserMsgMapper">
+
+    <select id="findAllNotice"  resultType="com.nzpq.shop_ssm.pojo.Notice"  parameterType="Integer">
+        select * from notice
+        <if test="noticeId != null ">
+            where id = #{noticeId}
+        </if>
+    </select>
+
+    <select id="findMyMsg" resultType="com.nzpq.shop_ssm.pojo.User" parameterType="Integer">
+        select * from user where id = #{id}
+    </select>
+
+    <insert id="addMessage" parameterType="com.nzpq.shop_ssm.pojo.Message" useGeneratedKeys="true" keyProperty="id">
+        insert into message(id,name,phone,content,user_id) values(#{id},#{name},#{phone},#{content},#{user_id})
+    </insert>
+
+    <update id="updateUserMsg" parameterType="com.nzpq.shop_ssm.pojo.User">
+        update user set phone = #{phone},realName = #{realName},sex = #{sex},address = #{address},email = #{email} where id = #{id}
+    </update>
+
+    <select id="findOldPass" resultType="com.nzpq.shop_ssm.pojo.User">
+        select * from user where id = #{uid} and password = #{oldPass};
+    </select>
+
+    <update id="updatePass" >
+        update user set password = #{newPass} where id = #{uid}
+    </update>
+
+</mapper>

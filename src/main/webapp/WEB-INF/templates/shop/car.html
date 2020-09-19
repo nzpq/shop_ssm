@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+</head>
+<body>
+<!--引入头部-->
+<div th:replace="common/top::#top"></div>
+<!--导航条-->
+<div class="width100" style="height: 45px;background: #dd4545;margin-top: 40px;position: relative;z-index: 100;">
+    <!--中间的部分-->
+    <div class="width1200 center_yh relative_yh" style="height: 45px;">
+        <!--普通导航-->
+        <!--引入普通导航栏-->
+        <div th:replace="common/bar::#pageNav"></div>
+    </div>
+</div>
+
+<div class="width1200 center_yh hidden_yh font14" style="height: 40px;line-height: 40px;">
+    <span>当前位置：</span><a href="${ctx}/login/uIndex" class="c_66">首页</a>
+    ><a href="#" class="c_66">我的购物车</a>
+</div>
+<div class="width1200 hidden_yh center_yh font20">全部商品<font class="red"></font> </div>
+<div class="width1198 hidden_yh center_yh" style="border: 1px solid #ddd;margin-top: 18px;min-height: 300px;">
+    <div class="width100 hidden_yh font14" style="height: 32px;line-height: 32px;
+    background: #f0f0f0;text-indent: 21px;color: #000; font-weight: 600;border-bottom: 1px solid #ddd;">商品详情</div>
+    <div class="width100 hidden_yh fon14" style="height: 42px;line-height: 42px;border-bottom: 1px solid #ddd;">
+        <div class="left_yh tcenter font14" style="width: 486px;">商品</div>
+        <div class="left_yh tcenter font14" style="width: 175px;">价格</div>
+        <div class="left_yh tcenter font14" style="width: 175px;">数量</div>
+        <div class="left_yh tcenter font14" style="width: 175px;">小计</div>
+        <div class="left_yh tcenter font14" style="width: 175px;">操作</div>
+    </div>
+
+        <div class="speCific" th:each="data:${list}" th:data-id="${data.cid}" id="cid" th:data-itemid="${data.id}">
+<!--            <input type="hidden" name="itemId" id="itemId" th:data-id="${data.id}">-->
+<!--            <input type="hidden" name="carId" id="carId" th:value="${data.cid}">-->
+            <div class="xzWxz">
+                <b><img src="../../../static/user/images/xzwxz.png"></b>
+            </div>
+            <div class="xzSp">
+                <img th:src="${data.url1}">
+                <div class="xzSpIn">
+                    <h3 class="font16 c_33 font100">[[${data.name}]]</h3>
+                </div>
+            </div>
+            <div class="xzJg">
+                ￥<font>[[${data.price}]]</font>
+            </div>
+            <div class="xzSl">
+                <div class="xzSlIn">
+                    <b class="Amin" id="sub">-</b>
+                    <input type="text" th:value="${data.num}" readonly class="cOnt" id="num">
+                    <b style="border-right: none;border-left:1px solid #ddd;" class="Aadd" id="add">+</b>
+                </div>
+            </div>
+            <div class="xzXj">￥<font>[[${data.total}]]</font></div>
+            <div class="xzSz">
+                <div class="xzCzIn">
+                    <a th:href="@{/commodity/removeCar(itemId=${data.id})}" class="Dels" >删除</a>
+                </div>
+            </div>
+        </div>
+
+</div>
+<div class="width1198 center_yh" style="height: 60px;background: #f0f0f0;border:1px solid #ddd;margin-top:40px;">
+    <div class="center_yh hidden_yh" style="width: 1178px;height: 60px;margin-left: 20px;">
+        <div class="ifAll"><b><img src="../../../static/user/images/xzwxz.png"></b><font>全选</font></div>
+        <div class="ifDel">删除</div>
+        <div class="sXd">
+            <div class="sXd1">已选商品（<font style="color: #cb1c20">0</font> ）</div>
+            <div class="sXd2">合计（不含运费）：￥<font style="color: #cb1c20" id="zjJg">0</font> </div>
+            <a href="javascript:void(0)" class="ifJs" onclick="ifJs()">结算</a>
+        </div>
+    </div>
+</div>
+<script>
+    //总的子项数量
+    var es = $(".speCific").length;
+    //给小计赋值
+    (function cx() {
+        for(var a=0;a<es;a++){
+            var lt = $(".xzJg").eq(a).find("font").html();
+            var num = $(".xzSl").eq(a).find("input").val();
+            var xj = lt*num;
+            $(".xzXj").eq(a).find("font").html(xj);
+        }
+    })();
+
+
+    //选择或不选择一项
+    $(".xzWxz").click(function () {
+        if($(this).hasClass("on")){
+            $(this).removeClass("on");
+        }else{
+            $(this).addClass("on");
+        }
+        var ty = $(".xzWxz.on").length;
+        $(".sXd1").find("font").html(ty);
+        if(ty==es){
+            $(".ifAll").addClass("on");
+        }else{
+            $(".ifAll").removeClass("on");
+        }
+        jsZj();
+    });
+
+    //计算总计
+    function jsZj(){
+        var total = 0;
+        $(".xzWxz.on").each(function () {
+            var price = $(this).parent().find(".xzJg").find("font").html();
+            var num = $(this).parent().find(".xzSl").find("input").val();
+            total += price*num;
+        });
+        $("#zjJg").html(sswr(total));
+    }
+
+    //保留两位小数
+    function sswr(num) {
+        return num.toFixed(2);
+    }
+
+    // let itemId = $("#itemId").attr("data-id");
+    // let cid = $("#cid").attr("data-id");
+
+    $(".Aadd").click(function () {
+
+        let cid = $(this).parent().attr("data-id");
+        let itemId = $(this).parent().attr("data-itemid");
+
+
+        var t = $(this).siblings(".cOnt").val()*1;
+        var price = $(this).parent().parent().siblings(".xzJg").find("font").html()*1;
+        t++;
+        $(this).siblings(".cOnt").val(t);
+        $(this).parent().parent().siblings(".xzXj").find("font").html(sswr(price*t));
+        // console.log(t);
+        jsZj();
+        $.get("/commodity/updateItemNum",{item_id:itemId,id:cid,num:t},function (response) {
+        });
+    });
+
+    $(".Amin").click(function () {
+
+
+        let cid = $(this).parent().attr("data-id");
+        let itemId = $(this).parent().attr("data-itemid");
+
+        var t = $(this).siblings(".cOnt").val()*1;
+        var price = $(this).parent().parent().siblings(".xzJg").find("font").html()*1;
+        t--;
+        if(t<1){
+            t=1;
+            return;
+        }
+        $(this).siblings(".cOnt").val(t);
+        $(this).parent().parent().siblings(".xzXj").find("font").html(sswr(price*t));
+        jsZj();
+        $.get("/commodity/updateItemNum",{item_id:itemId,id:cid,num:t},function (response) {
+        });
+    });
+
+    $(".ifAll").click(function () {
+        if($(".ifAll").hasClass("on")){
+            $(this).removeClass("on");
+            $(".xzWxz").removeClass("on");
+            $(".sXd1").find("font").html(0);
+        }else{
+            $(this).addClass("on");
+            $(".xzWxz").addClass("on");
+            $(".sXd1").find("font").html(es);
+        }
+        jsZj();
+    });
+
+    // //单项删除
+    // $(".Dels").click(function () {
+    //     var id = $(this).attr("data-id");
+    //     $.ajax({
+    //         type:"POST",
+    //         url:"${ctx}/car/delete?id="+id,
+    //         contentType:"application/json",
+    //         success:function (result) {
+    //         }
+    //     });
+    //     alert("删除成功");
+    //     $(this).parent().parent().parent().remove();
+    //     jsZj();
+    // });
+    //
+    // //批量删除
+    // $(".ifDel").click(function () {
+    //     $(".xzWxz.on").each(function () {
+    //         var id = $(this).parent().attr("data-id");
+    //         $.ajax({
+    //             type:"POST",
+    //             url:"${ctx}/car/delete?id="+id,
+    //             contentType:"application/json",
+    //             success:function (result) {
+    //             }
+    //         });
+    //     });
+    //     alert("删除成功");
+    //     $(".xzWxz.on").parent().remove();
+    //     jsZj();
+    // });
+
+    /**
+     * 结算--进入购买流程
+     */
+    function ifJs() {
+        var arr = new Array();
+        $(".xzWxz.on").each(function () {
+            // var $id = $(this).parent().attr("data-id");
+            // let cid = $("#carId").val();
+            let cid = $(this).parent().attr("data-id");
+            var $num = $(this).parent().find(".xzSl").find("input").val();
+            var obj = new Object();
+            obj.id = cid;
+            obj.num = $num;
+            arr.push(obj);
+        });
+        if(arr.length==0){
+            alert("请至少选择一个商品结算");
+            return false;
+        }
+        $.ajax({
+            type:"POST",
+            url:"/commodity/itemOrder",
+            // data: "list="+JSON.stringify(arr),
+            data: JSON.stringify(arr),
+            contentType:"application/json",
+            success:function (result) {
+                if(result.msg == 1){
+                    alert(result.info);
+                }else{
+                    alert("购买成功，请前往个人中心付款！");
+                    window.location.reload();
+                }
+            }
+        });
+
+        // $.post("/commodity/itemOrder",{list:arr},function (data) {
+        //     if(data.msg == 1){
+        //         alert("请编辑地址");
+        //     }else{
+        //         alert("购买成功")
+        //     }
+        // });
+    }
+</script>
+
+<!--引入尾部-->
+<div th:replace="common/foot::#foot"></div>
+</body>
+</html>

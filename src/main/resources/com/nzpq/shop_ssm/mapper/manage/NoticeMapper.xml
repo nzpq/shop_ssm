@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.manage.NoticeMapper">
+
+    <select id="findAllNotice" resultType="com.nzpq.shop_ssm.pojo.Notice" >
+
+        select * from notice
+
+    </select>
+
+    <insert id="addNotice" parameterType="com.nzpq.shop_ssm.pojo.Notice" useGeneratedKeys="true" keyProperty="id">
+        insert into notice(id,name,content,addTime) values (#{id},#{name},#{content},#{addTime})
+    </insert>
+
+    <select id="findOne" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Notice">
+        select * from notice where id = #{id}
+    </select>
+
+    <update id="updateNotice" parameterType="com.nzpq.shop_ssm.pojo.Notice">
+        update notice set name = #{name},content = #{content},addTime = #{addTime} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from notice where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.manage.AdminMapper">
+
+    <select id="findByUsername" parameterType="String" resultType="com.nzpq.shop_ssm.pojo.Manage">
+        select * from manage where username = #{username}
+    </select>
+
+    <select id="findAllUser" resultType="com.nzpq.shop_ssm.pojo.User" parameterType="com.nzpq.shop_ssm.pojo.User">
+        select * from user
+
+            <if test="realName != null">
+                where realName = #{realName}
+            </if>
+
+    </select>
+</mapper>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+</head>
+<body>
+<!--引入头部-->
+<div th:replace="common/top::#top"></div>
+<!--导航条-->
+<div class="width100" style="height: 45px;background: #dd4545;margin-top: 40px;position: relative;z-index: 100;">
+    <!--中间的部分-->
+    <div class="width1200 center_yh relative_yh" style="height: 45px;">
+        <!--引入普通导航栏-->
+        <div th:replace="common/bar::#pageNav"></div>
+    </div>
+</div>
+
+<div class="width1200 center_yh hidden_yh font14" style="height: 40px;line-height: 40px;">
+    <span>当前位置：</span><a href="${ctx}/login/uIndex" class="c_66">首页</a>
+    ><a href="#" class="c_66">个人中心</a>
+    ><a href="#" class="c_66">我的订单</a>
+</div>
+<div class="width100 hidden_yh" style="background: #f0f0f0;padding-top: 34px;padding-bottom: 34px;">
+    <div class="width1200 hidden_yh center_yh">
+        <!--引入用户功能栏-->
+        <div th:replace="common/bar::#vipNav(uri='center')"></div>
+        <div id="vipRight">
+            <div style="width: 938px;border:1px solid #ddd;background: #fff;">
+                <div class="width100 hidden_yh" style="height: 74px;line-height: 74px;background: #f5f8fa;border-bottom: 1px solid #ddd;" id="navLt">
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">全部订单[[${list.size()}]]</span>
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">待付款[[${pays.size()}]]</span>
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">已取消：[[${Cancels.size()}]]</span>
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">待发货：[[${sends.size()}]]</span>
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">待收货：[[${receiv.size()}]]</span>
+                    <span class="left_yh font24 width20 tcenter cursor onHover onorange" style="width: 156px">已收货：[[${isReceiv.size()}]]</span>
+                </div>
+                <!--全部订单-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: block;">
+
+                        <div class="width100 hidden_yh" th:each="order:${list}">
+                            <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                                <div style="width: 900px;height: 60px">
+                                    <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                    <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                    <!--                                <div>订单号：[[${order.code}]]</div>-->
+                                    <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                    <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                    <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                    <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                    <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                                </div>
+                            </div>
+
+                                <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                                    <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                                    <div class="left_yh" style="width: 580px;">
+                                        <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                        <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                        <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                        <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                                    </div>
+                                    <div class="right_yh">
+
+                                            <a th:if="${order.status == 3}" th:href="@{/commodity/toComment(itemId=${goods.item.id})}" class="onfff block_yh tcenter font16 onHoverr" style="margin-top: 10px;padding-right: 6px;">
+                                                去评价
+                                            </a>
+
+                                    </div>
+
+                                </div>
+
+                            <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                                <font class="font24">总金额</font>
+                                <font class="font24 red">￥[[${order.total}]]</font>
+
+                                <a th:if="${msg != null}" th:value="${msg}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+
+                                </a>&nbsp;&nbsp;&nbsp;
+
+                                    <a th:if="${order.status == 4}" th:href="@{/commodity/deleteOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                        取消订单
+                                    </a>&nbsp;&nbsp;&nbsp;
+                                    <a th:if="${order.status == 4}" th:href="@{/commodity/payOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                        去付款
+                                    </a>
+
+                                    <a th:if="${order.status == 1}" href="#" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                        已取消
+                                    </a>
+
+                                    <a th:if="${order.status == 2}" th:href="@{/commodity/getOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                        去收货
+                                    </a>
+
+                                    <a th:if="${order.status == 3}" href="#" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                        已收货
+                                    </a>
+
+                            </div>
+                        </div>
+
+                </div>
+
+                <!--待付款-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: none;">
+                    <div class="width100 hidden_yh" th:each="order:${pays}">
+                        <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                            <div style="width: 900px;height: 60px">
+                                <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                            <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                            <div class="left_yh" style="width: 580px;">
+                                <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                            </div>
+                            <div class="right_yh">
+
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                            <font class="font24">总金额</font>
+                            <font class="font24 red">￥[[${order.total}]]</font>
+
+                            <a th:if="${order.status == 4}" th:href="@{/commodity/deleteOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                取消订单
+                            </a>
+                            <a th:href="@{/commodity/payOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                去付款
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--已取消-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: none;">
+                    <div class="width100 hidden_yh" th:each="order:${Cancels}">
+                        <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                            <div style="width: 900px;height: 60px">
+                                <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                <!--                                <div>订单号：[[${order.code}]]</div>-->
+                                <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                            <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                            <div class="left_yh" style="width: 580px;">
+                                <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                            </div>
+                            <div class="right_yh">
+
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                            <font class="font24">总金额</font>
+                            <font class="font24 red">￥[[${order.total}]]</font>
+
+                            <a th:if="${order.status == 1}" href="#" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                已取消
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--待发货-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: none;">
+                    <div class="width100 hidden_yh" th:each="order:${sends}">
+                        <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                            <div style="width: 900px;height: 60px">
+                                <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                <!--                                <div>订单号：[[${order.code}]]</div>-->
+                                <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                            <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                            <div class="left_yh" style="width: 580px;">
+                                <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                            </div>
+                            <div class="right_yh">
+
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                            <font class="font24">总金额</font>
+                            <font class="font24 red">￥[[${order.total}]]</font>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--待收货-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: none;">
+                    <div class="width100 hidden_yh" th:each="order:${receiv}">
+                        <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                            <div style="width: 900px;height: 60px">
+                                <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                <!--                                <div>订单号：[[${order.code}]]</div>-->
+                                <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                            <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                            <div class="left_yh" style="width: 580px;">
+                                <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                            </div>
+                            <div class="right_yh">
+
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                            <font class="font24">总金额</font>
+                            <font class="font24 red">￥[[${order.total}]]</font>
+
+                            <a th:if="${order.status == 2}" th:href="@{/commodity/getOrder(id=${order.id})}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                去收货
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--已收货-->
+                <div class="allGoods width100 hidden_yh hhD" style="display: none;">
+                    <div class="width100 hidden_yh" th:each="order:${isReceiv}">
+                        <div class="width100 hidden_yh fon20 c_66" style="background:#faf5f5;text-indent: 47px;height: 50px;line-height: 50px;border-bottom: 1px solid #ddd;">
+                            <div style="width: 900px;height: 60px">
+                                <span style="width: 390px"  th:text="'时间：'+${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;
+                                <span style="width: 390px">订单号：[[${order.code}]]</span>&nbsp;&nbsp;
+                                <!--                                <div>订单号：[[${order.code}]]</div>-->
+                                <span style="width: 200px" th:if="${order.status == 0}">状态：待发货</span>
+                                <span style="width: 200px" th:if="${order.status == 1}">状态：已取消</span>
+                                <span style="width: 200px" th:if="${order.status == 2}">状态：待收货</span>
+                                <span style="width: 200px" th:if="${order.status == 3}">状态：已收货</span>
+                                <span style="width: 200px" th:if="${order.status == 4}">状态：待付款</span>
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;border-bottom: 1px dashed #ddd;padding-top: 30px;padding-bottom: 30px;" class="hidden_yh center_yh" th:each="goods:${order.details}">
+                            <img th:src="${goods.item.url1}" width="100" height="100" class="left_yh" style="padding-right: 10px">
+                            <div class="left_yh" style="width: 580px;">
+                                <h3 class="font18 c_33 font100">[[${goods.item.name}]]</h3>
+                                <p class="c_66 font16" style="margin-top: 16px;">折扣：[[${goods.item.zk}]]</p>
+                                <p class="red" style="margin-top: 10px;">数量：[[${goods.num}]]</p>
+                                <p class="red" style="margin-top: 10px;">单价：￥[[${goods.item.price}]]</p>
+                            </div>
+                            <div class="right_yh">
+
+                                <a th:if="${order.status == 3}" th:href="@{/commodity/toComment(itemId=${goods.item.id})}" class="onfff block_yh tcenter font16 onHoverr" style="margin-top: 10px;padding-right: 6px;">
+                                    去评价
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <div style="width: 838px;padding-top:30px;padding-bottom: 30px;" class="hidden_yh center_yh tleft">
+                            <font class="font24">总金额</font>
+                            <font class="font24 red">￥[[${order.total}]]</font>
+
+                            <a th:if="${msg != null}" th:value="${msg}" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+
+                            </a>&nbsp;&nbsp;&nbsp;
+                            <a th:if="${order.status == 3}" href="#" class="c_33 onHover font20 onorange right_yh" style="margin-top: 10px;padding-right: 6px;">
+                                已收货
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--引入尾部-->
+<div th:replace="common/foot::#foot"></div>
+
+<script type="text/javascript">
+    $("#navLt span").click(function () {
+        var t = $(this).index();
+        $(this).addClass("slect").siblings().removeClass("slect");
+        $(".hhD").eq(t).css({display:"block"}).siblings(".hhD").css({display:"none"});
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

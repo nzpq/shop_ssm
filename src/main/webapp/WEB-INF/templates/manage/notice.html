@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <form action="" id="listform" method="post">
+        <div class="padding border-bottom">
+            <ul class="search" style="padding-left: 10px;">
+                <li>
+                    <a class="button border-main icon-plus-square-o" th:href="@{/addNotice}">添加公告</a>
+                </li>
+                <li>
+                    <input type="text" placeholder="请输入公告名称" name="name" class="input" value=""
+                           style="width: 250px;line-height: 17px;display: inline-block" />
+                    <a href="javascript:void(0)" onclick="changeSearch()" class="button border-main icon-search">搜索</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+    <table class="table table-hover text-center">
+        <tr>
+            <th>名称</th>
+            <th>内容</th>
+            <th>发布时间</th>
+            <th>操作</th>
+        </tr>
+
+            <tr th:each="notice:${list}">
+                <td>[[${notice.name}]]</td>
+                <td>[[${notice.content}]]</td>
+                <td th:text="${#dates.format(notice.addTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td>
+                    <a class="button border-main" th:href="@{/notice/findOne(id=${notice.id})}"><span class="icon-edit">修改</span> </a>
+                    <a class="button border-red" th:href="@{/notice/deleteNotice(id=${notice.id})}"><span class="icon-trash-o">删除</span> </a>
+                </td>
+
+            </tr>
+
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+                    <!--分页开始-->
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function changeSearch(){
+        $("#listform").submit();
+    }
+</script>
+</body>
+
+</html>

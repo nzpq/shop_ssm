@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <form action="" id="listform" method="post">
+        <div class="padding border-bottom">
+            <ul class="search" style="padding-left: 10px;">
+                <li>
+                    <input type="text" placeholder="请输入姓名" name="name" class="input" value=""
+                           style="width: 250px;line-height: 17px;display: inline-block" />
+                    <a href="javascript:void(0)" onclick="changeSearch()" class="button border-main icon-search">搜索</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+    <table class="table table-hover text-center">
+        <tr>
+            <th>留言人昵称</th>
+            <th>账号</th>
+            <th>手机号</th>
+            <th>留言内容</th>
+            <th>操作</th>
+        </tr>
+            <tr th:each="msg:${list}">
+                <td>[[${msg.name}]]</td>
+                <td>[[${msg.user.username}]]</td>
+                <td>[[${msg.phone}]]</td>
+                <td>[[${msg.content}]]</td>
+                <td>
+                    <a class="button border-red" th:href="@{/message/deleteMessage(id=${msg.id})}"><span class="icon-trash-o">删除</span> </a>
+                </td>
+
+            </tr>
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+                    <!--分页开始-->
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function changeSearch(){
+        $("#listform").submit();
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.shop.ViewMapper">
+
+    <select id="findZheKouItem"  resultType="com.nzpq.shop_ssm.pojo.Item">
+        select * from item where isdelete is not null and zk is not null order by zk limit 0 , 10
+    </select>
+
+    <select id="findReMenItem"  resultType="com.nzpq.shop_ssm.pojo.Item">
+        select * from item where isdelete is not null and gmNum is not null order by gmNum DESC limit 0 , 10
+    </select>
+
+
+</mapper>

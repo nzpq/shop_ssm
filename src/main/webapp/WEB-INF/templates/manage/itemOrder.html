@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <form th:action="@{/order/findAllOrder(page=1,size=8)}" id="listform" method="get">
+        <div class="padding border-bottom">
+            <ul class="search" style="padding-left: 10px;">
+                <li>
+                    <input type="text" placeholder="订单号" name="code" class="input" value=""
+                           style="width: 250px;line-height: 17px;display: inline-block" />
+                    <a href="javascript:void(0)" onclick="changeSearch()" class="button border-main icon-search">搜索</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+    <table class="table table-hover text-center">
+        <tr>
+            <th>订单号</th>
+            <th>下单时间</th>
+            <th>总金额（￥）</th>
+            <th>下单人</th>
+            <th>订单状态</th>
+            <th>操作</th>
+        </tr>
+
+            <tr th:each="order:${info.list}">
+                <td>[[${order.code}]]</td>
+                <td th:text="${#dates.format(order.addTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td>[[${order.total}]]</td>
+                <td>[[${order.user.username}]]</td>
+                <td style="color: red" th:if="${order.status} == 0">待发货</td>
+                <td style="color: red" th:if="${order.status} == 1">已取消</td>
+                <td style="color: red" th:if="${order.status} == 2">待收货</td>
+                <td style="color: red" th:if="${order.status} == 3">已收货</td>
+                <td style="color: red" th:if="${order.status} == 4">未付款</td>
+                <td>
+                    <a class="button border-main" th:href="@{/order/findOrderItem(id=${order.id})}"><span class="icon-edit">查看购买商品</span> </a>
+
+                        <a th:if="${order.status} == 0" class="button border-red" th:href="@{/order/sendGoods(id=${order.id})}"><span class="icon-trash-o" >去发货</span> </a>
+
+                </td>
+
+            </tr>
+
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+                    <!--分页开始-->
+                    共 [[${info.pages}]] 页，
+                    共 [[${info.total}]] 记录，
+                    当前第 [[${info.pageNum}]] 页
+
+                    <a th:href="@{/order/findAllOrder(page=1,size=8)}">首页</a>
+
+                    <a th:href="@{/order/findAllOrder(page=${info.pageNum - 1},size=8)}">上一页</a>
+                    <a th:href="@{/order/findAllOrder(page=${info.pageNum + 1},size=8)}">下一页</a>
+
+                    <a th:href="@{/order/findAllOrder(page=${info.pages},size=8)}">尾页</a>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function changeSearch(){
+        $("#listform").submit();
+    }
+</script>
+</body>
+
+</html>

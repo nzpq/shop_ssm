@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <table class="table table-hover text-center">
+        <tr>
+            <th>商品名称</th>
+            <th>商品主图</th>
+            <th>商品单价</th>
+            <th>购买数量</th>
+            <th>小计</th>
+            <th>状态</th>
+        </tr>
+
+            <tr th:each="detail:${list}">
+                <td>[[${detail.item.name}]]</td>
+                <td><img th:src="${detail.item.url1}" alt="" style="width: 100px;height: 100px;"></td>
+                <td>[[${detail.item.price}]]</td>
+                <td>[[${detail.num}]]</td>
+                <td>[[${detail.total}]]</td>
+                <td th:if="${detail.status} == 0" style="color: red">未退货</td>
+                <td th:if="${detail.status} == 1" style="color: red">已退货</td>
+
+            </tr>
+
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.shop.ShopItemMapper">
+
+
+    <select id="findItems" resultType="com.nzpq.shop_ssm.pojo.Item" parameterType="com.nzpq.shop_ssm.domain.QueryVO">
+        select * from item where  isDelete = 0
+
+            <if test="id != null ">
+                and category_id_two = #{id}
+            </if>
+            <if test="condition != null ">
+                and name like concat('%',#{condition},'%')
+            </if>
+
+    </select>
+
+    <insert id="addFavorite" parameterType="com.nzpq.shop_ssm.pojo.Favorite" useGeneratedKeys="true" keyProperty="id">
+        insert into sc(id,item_id,user_id) values(#{id},#{itemId},#{userId})
+    </insert>
+
+    <select id="findOneItem" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Item">
+        select * from item where  isDelete = 0 and id = #{id}
+
+    </select>
+
+    <update id="updateFavoriteNum" parameterType="com.nzpq.shop_ssm.pojo.Item">
+        update item set scNum = #{scNum} where id = #{id}
+    </update>
+
+    <select id="findUserFavorite" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Item">
+        select * from item where id in (select item_id from sc where user_id = #{uid})
+    </select>
+
+    <delete id="removeFavorite" parameterType="com.nzpq.shop_ssm.pojo.Favorite">
+        delete from sc where user_id = #{userId} and item_id = #{itemId}
+    </delete>
+
+    <select id="findCar" parameterType="Integer" resultType="com.nzpq.shop_ssm.domain.CartInfo">
+        select item.id,item.name,item.url1,item.price,c.num,c.total,c.id as cid from item
+        join
+            (select * from car where user_id = ${id})  c
+        on item.id = c.item_id
+    </select>
+
+    <select id="findItemInCar" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Car">
+        select * from car where item_id = #{id} and user_id = #{uid}
+    </select>
+
+    <insert id="addCar" parameterType="com.nzpq.shop_ssm.pojo.Car" useGeneratedKeys="true" keyProperty="id">
+        insert into car(id,item_id,user_id,num,price,total) values (#{id},#{item_id},#{user_id},#{num},#{price},#{total})
+    </insert>
+
+    <select id="findByIdAndUid" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Car">
+        select * from car where user_id = #{uid} and item_id = #{itemId}
+    </select>
+
+    <update id="updateCarNum" parameterType="com.nzpq.shop_ssm.pojo.Car">
+        update car set num = #{num},total = #{total} where id = #{id}
+    </update>
+    
+    <delete id="removeCar" parameterType="Integer">
+        delete from car where item_id = #{itemId} and user_id = #{uid}
+    </delete>
+
+    <select id="findItemDetail" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Item">
+        select * from item where id = #{id}
+    </select>
+
+    <select id="findItemComment" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Comment">
+        select * from comment where item_id = #{id}
+    </select>
+
+    <select id="findUser" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.User">
+        select * from user where id = #{user_id}
+    </select>
+
+    <select id="findOneCar" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Car">
+        select * from car where id = #{id}
+    </select>
+
+    <insert id="addOrder" parameterType="com.nzpq.shop_ssm.pojo.ItemOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into item_order(id,user_id,code,addTime,total,isDelete,status) values(#{id},#{user_id},#{code},#{addTime},#{total},#{isDelete},#{status})
+    </insert>
+
+    <insert id="addItemDetail" parameterType="com.nzpq.shop_ssm.pojo.OrderDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into order_detail(id,item_id,order_id,status,num,total) values(#{id},#{item_id},#{order_id},#{status},#{num},#{total})
+    </insert>
+
+    <select id="findAllMyOrder" resultType="com.nzpq.shop_ssm.pojo.ItemOrder" parameterType="Integer">
+        select * from item_order where user_id = #{uid}
+        <if test="status != -1">
+            and status = #{status}
+        </if>
+    </select>
+
+    <select id="findItemDetails" resultType="com.nzpq.shop_ssm.pojo.OrderDetail" parameterType="Integer">
+        select * from order_detail where order_id = #{id}
+    </select>
+
+    <update id="deleteOrder" parameterType="Integer">
+        update item_order set status = 1 where id = #{id}
+    </update>
+
+
+    <update id="payOrder" parameterType="Integer">
+         update item_order set status = 0 where id = #{id}
+    </update>
+
+    <update id="getOrder" parameterType="Integer">
+         update item_order set status = 3 where id = #{id}
+    </update>
+
+    <insert id="addComment" parameterType="com.nzpq.shop_ssm.pojo.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(id,user_id,item_id,content,addTime) values(#{id},#{user_id},#{item_id},#{content},#{addTime})
+    </insert>
+
+    <select id="findComment" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.Comment">
+        select * from comment where user_id = #{uid} and item_id = #{itemId}
+    </select>
+</mapper>

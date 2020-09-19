@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head" id="add">
+        <strong><span class="icon-pencil-square-o" th:text="${item.pid == null} ? '修改一级分类' : '修改二级分类' "></span> </strong>
+    </div>
+    <div class="body-content">
+        <form th:action="@{/item/updateItemCategory}" method="post" class="form-x">
+            <input type="hidden" name="id" th:value="${item.id}" />
+            <div class="form-group">
+                <div class="label"><label th:text="${item.pid == null} ? '一级分类名称' : '二级分类名称' "></label></div>
+                <div class="field">
+                    <input type="text" class="input w50" name="name" th:value="${item.name}"   />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label"></div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit">修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th= "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<div id="top">
+
+<div class="width100" style="height: 25px;background: #f0f0f0;">
+    <div class="width1200 center_yh font14 c_66" style="height: 25px;line-height: 25px;">
+        <font class="left_yh">欢迎来到水果蔬菜商城！</font>
+        <div class="right_yh" id="fast_jump">
+
+            <div th:if="${session.user} != null">
+                <a href="#">欢迎您：[[${session.user.realName}]]</a>
+                <b></b>
+                <a th:href="@{/commodity/findMyCar}">我的购物车</a>
+                <b></b>
+                <a th:href="@{/userMsg/myCenter}">个人中心</a>
+                <b></b>
+                <a th:href="@{/user/logout}">退出</a>
+
+            </div>
+            <diiv th:if="${session.user} == null">
+                <a th:href="@{/login}">登录</a>
+                <b></b>
+                <a th:href="@{/register}">注册</a>
+                <b></b>
+            </diiv>
+
+
+        </div>
+    </div>
+</div>
+<div class="width100 hidden_yh">
+    <div class="width1200 center_yh hidden_yh">
+        <div href="#" class="block_yh left_yh">
+            <img src="../../../static/images/logo.png" alt="" style="height: 70px">
+        </div>
+        <div class="right_yh" style="height:28px;width:316px;border:2px solid #dd4545;margin-top:-40px;">
+
+                <input type="text" id="searchVal" placeholder="关键词查询" class="search" style="width: 253px;height: 26px" name="condition" value="">
+                <input type="button" id="searchBtn" onclick="searchItem()" class="btnSearh" value="搜索"  >
+
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

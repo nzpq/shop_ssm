@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+    <script>
+
+        //校验昵称
+        function checkRealName() {
+            var realname = $("#realName").val();
+
+            var flag = true;
+            if(realname.length == 0 || "" == realname){
+                flag=false;
+            }
+            if(flag){
+                //昵称不为空
+                $("#realName").css("border","");
+            }else{
+                //验证码为空
+                alert("昵称不能为空！");
+                $("#realName").css("border","1px solid red");
+            }
+            return flag;
+        }
+        //校验地址
+        function checkAddress() {
+            var address = $("#address").val();
+
+            var flag = true;
+            if(address.length == 0 || "" == address){
+                flag=false;
+            }
+            if(flag){
+                //昵称不为空
+                $("#address").css("border","");
+            }else{
+                //验证码为空
+                alert("地址不能为空！");
+                $("#address").css("border","1px solid red");
+            }
+
+            return flag;
+        }
+
+
+        //校验Email
+        function checkEmail(){
+            var email = $("#email").val();
+            var reg_email = /^\w+@\w+\.\w+$/;
+            var flag =  reg_email.test(email);
+            if(flag){
+                //用户名合法
+                $("#email").css("border","");
+            }else{
+                //用户名非法
+                alert("请输入正确的邮箱！");
+                $("#email").css("border","1px solid red");
+            }
+            return flag;
+        }
+        //校验手机号
+        function checkTelephone(){
+            var telephone = $("#phone").val();
+            var reg_telephone = /^1[3456789]\d{9}$/;
+            var flag =  reg_telephone.test(telephone);
+            if(flag){
+                //用户名合法
+                $("#phone").css("border","");
+            }else{
+                //用户名非法
+                alert("请输入正确的手机号！");
+                $("#phone").css("border","1px solid red");
+            }
+            return flag;
+        }
+
+
+        function formSubmin (){
+            if(checkEmail() && checkTelephone() && checkRealName() && checkAddress()){
+                return true;
+            }
+            return false;
+        }
+        $(function () {
+            $("#email").blur(checkEmail);
+            $("#phone").blur(checkTelephone);
+            $("#realName").blur(checkRealName);
+            $("#address").blur(checkAddress);
+        });
+
+
+
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div th:replace="common/top::#top"></div>
+<!--导航条-->
+<div class="width100" style="height: 45px;background: #dd4545;margin-top: 40px;position: relative;z-index: 100;">
+    <!--中间的部分-->
+    <<!--引入普通导航栏-->
+    <div th:replace="common/bar::#pageNav"></div>
+</div>
+
+<div class="width1200 center_yh hidden_yh font14" style="height: 40px;line-height: 40px;">
+    <span>当前位置：</span><a href="#" class="c_66">首页</a>
+    ><a href="#" class="c_66">个人中心</a>
+    ><a href="#" class="c_66">个人信息</a>
+</div>
+<div class="width100 hidden_yh" style="background: #f0f0f0;padding-top: 34px;padding-bottom: 34px;">
+    <div class="width1200 hidden_yh center_yh">
+        <!--引入用户功能栏-->
+        <div th:replace="common/bar::#vipNav(uri='center')"></div>
+        <div id="vipRight">
+            <form th:action="@{/userMsg/updateMsg}" onsubmit="return formSubmin()" method="post" id="myf">
+                <div class="hidden_yh bj_fff" style="width: 938px;border: 1px solid #ddd;">
+                    <div class="width100 font24" style="height: 60px;line-height: 60px;text-indent: 50px; background: #f5f8fa;border-bottom: 1px solid #ddd;">基本信息</div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                        <div class="left_yh font16 tright" style="width: 120px;">
+                            <font class="red">*</font>昵称：
+                        </div>
+                        <input type="text" name="realName" id="realName" th:value="${user.realName}"  style="width: 243px;border: 1px solid #ddd;outline: none;height:30px;text-indent: 10px;">
+                    </div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                        <div class="left_yh font16 tright" style="width: 120px;">
+                            <font class="red">*</font>性别：
+                        </div>
+<!--                        <select style="outline: none;border: 1px solid #ddd;height: 30px;" name="sex">-->
+<!--                            <option value="男" ${user.sex=='男'?'selected="selected"':''}>男</option>-->
+<!--                            <option value="女" ${user.sex=='女'?'selected="selected"':''}>女</option>-->
+                            <input type="radio" name="sex" value="男" th:checked="${user.sex == '男' }">男
+                            <input type="radio" name="sex" value="女" th:checked="${user.sex == '女'}">女
+<!--                        </select>-->
+                    </div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                        <div class="left_yh font16 tright" style="width: 120px;">
+                            <font class="red">*</font>邮箱：
+                        </div>
+                        <input type="text" id="email" name="email" th:value="${user.email}" style="width: 243px;border: 1px solid #ddd;outline: none;height:30px;text-indent: 10px;">
+                    </div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                        <div class="left_yh font16 tright" style="width: 120px;">
+                            <font class="red">*</font>手机号：
+                        </div>
+                        <input type="text" name="phone" id="phone" th:value="${user.phone}" style="width: 243px;border: 1px solid #ddd;outline: none;height:30px;text-indent: 10px;">
+                    </div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                        <div class="left_yh font16 tright" style="width: 120px;">
+                            <font class="red">*</font>地址：
+                        </div>
+                        <input type="text" name="address" id="address" th:value="${user.address}" style="width: 243px;border: 1px solid #ddd;outline: none;height:30px;text-indent: 10px;">
+                    </div>
+                    <div class="width100" style="height: 32px;line-height: 32px;margin-top: 70px;">
+<!--                        <a href="javascript:void(0)" class="left_yh block_yh font16 tcenter ff5802 sub" style="width: 244px;height: 33px;line-height: 33px;margin-left: 120px;">保存</a>-->
+                        <input type="submit" class="left_yh block_yh font16 tcenter ff5802 sub" style="width: 244px;height: 33px;line-height: 33px;margin-left: 120px;" value="修改">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--引入尾部-->
+<div th:replace="common/foot::#foot"></div>
+<!--<script type="text/javascript">-->
+<!--    $(function () {-->
+<!--        $(".sub").click(function () {-->
+<!--            alert("修改成功");-->
+<!--            $("#myf").submit();-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+<!--<script>-->
+<!--    function changeForm() {-->
+<!--        $("#realName").attr("readonly",false);-->
+<!--    }-->
+
+<!--</script>-->
+</body>
+</html>

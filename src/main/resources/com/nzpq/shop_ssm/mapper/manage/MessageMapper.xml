@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.manage.MessageMapper">
+
+    <select id="findAll" resultType="com.nzpq.shop_ssm.pojo.Message">
+        select * from message
+    </select>
+
+
+    <select id="findUserById" resultType="com.nzpq.shop_ssm.pojo.User" parameterType="Integer">
+
+        select * from user where id = #{id}
+
+    </select>
+
+    <delete id="delete" parameterType="Integer">
+        delete from message where id = #{id}
+    </delete>
+
+</mapper>

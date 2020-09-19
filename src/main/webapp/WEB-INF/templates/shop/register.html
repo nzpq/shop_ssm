@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+    <script>
+        //校验用户名
+        function checkUsername() {
+            var username = $("#username").val();
+            var reg_username = /^\w{3,8}$/;
+            var flag = reg_username.test(username);
+            if( flag ){
+                $("#username").css("border","");
+            }else{
+                alert("用户名格式错误，请输入3到8位字母或数字！");
+                $("#username").css("border","1px solid red");
+            }
+            return flag;
+        }
+
+        //校验昵称
+        function checkRealName() {
+            var realname = $("#realName").val();
+
+            var flag = true;
+            if(realname.length == 0 || "" == realname){
+                flag=false;
+            }
+            if(flag){
+                //昵称不为空
+                $("#realName").css("border","");
+            }else{
+                //验证码为空
+                alert("昵称不能为空！");
+                $("#realName").css("border","1px solid red");
+            }
+
+            return flag;
+        }
+
+        //校验密码
+        function checkPassword(){
+            var password = $("#password").val();
+            var reg_password = /^\w{6,20}$/;
+            var flag = reg_password.test(password);
+            if(flag){
+                //用户名合法
+                $("#password").css("border","");
+            }else{
+                //用户名非法
+                alert("密码格式错误，请输入6到20位字母或数字！");
+                $("#password").css("border","1px solid red");
+            }
+            return flag;
+        }
+
+        //校验Email
+        function checkEmail(){
+            var email = $("#email").val();
+            var reg_email = /^\w+@\w+\.\w+$/;
+            var flag =  reg_email.test(email);
+            if(flag){
+                //用户名合法
+                $("#email").css("border","");
+            }else{
+                //用户名非法
+                alert("请输入正确的邮箱！");
+                $("#email").css("border","1px solid red");
+            }
+            return flag;
+        }
+        //校验手机号
+        function checkTelephone(){
+            var telephone = $("#phone").val();
+            var reg_telephone = /^1[3456789]\d{9}$/;
+            var flag =  reg_telephone.test(telephone);
+            if(flag){
+                //用户名合法
+                $("#phone").css("border","");
+            }else{
+                //用户名非法
+                alert("请输入正确的手机号！");
+                $("#phone").css("border","1px solid red");
+            }
+            return flag;
+        }
+
+        //校验是否选中checkbox
+        function checkB() {
+            var flag = true;
+            if(!$("#checkBox").is(':checked')){
+                flag = false;
+                alert("请阅读并勾选用户协议！")
+            }
+            return flag;
+        }
+
+
+        function formSubmin (){
+            if(checkUsername() && checkPassword() && checkEmail() && checkTelephone() && checkB() && checkRealName()){
+                return true;
+            }
+            return false;
+        }
+        $(function () {
+
+
+            console.log($("#checkBox").is(':checked'))
+
+            $("#username").blur(checkUsername);
+            $("#password").blur(checkPassword);
+            $("#email").blur(checkEmail);
+            $("#phone").blur(checkTelephone);
+            $("#realName").blur(checkRealName);
+        });
+
+
+
+    </script>
+</head>
+<body>
+<div class="width100 hidden_yh" style="border-top: 1px solid #ddd">
+
+    <div class="width1200 hidden_yh center_yh" style="margin-top: 75px">
+
+
+        <form id="registerForm" onsubmit="return formSubmin()" th:action="@{/user/register}" method="post">
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;" th:if="${error} != null">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright"></span>
+                <p  style="width: 292px;height: 42px;font-size: 16px;text-indent: 22px;color: red" class="left_yh">[[${error}]]</p>
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">用户名：</span>
+                <input type="text" id="username" name="username" placeholder="请输入您的用户名" style="border:1px solid #c9c9c9;width: 292px;height: 42px;font-size: 16px;text-indent: 22px;" class="left_yh">
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">设置密码：</span>
+                <input type="password" id="password" name="password" placeholder="建议至少使用两种字符组合" style="border:1px solid #c9c9c9;width: 292px;height: 42px;font-size: 16px;text-indent: 22px;" class="left_yh">
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">昵称：</span>
+                <input type="text" id="realName" name="realName" placeholder="请输入您的昵称" style="border:1px solid #c9c9c9;width: 292px;height: 42px;font-size: 16px;text-indent: 22px;" class="left_yh">
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">性别：</span>
+                <input type="radio" name="sex" value="男" checked="checked">男
+                <input type="radio" name="sex" value="女" >女
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">手机号：</span>
+                <input type="text" id="phone" name="phone" placeholder="建议使用常用的手机" style="border:1px solid #c9c9c9;width: 292px;height: 42px;font-size: 16px;text-indent: 22px;" class="left_yh">
+            </div>
+            <div class="center_yh hidden_yh" style="width: 475px;margin-bottom: 40px;">
+                <span style="margin-right: 40px;height: 42px;line-height: 42px;width: 100px;" class="left_yh block_yh tright">电子邮箱：</span>
+                <input type="text" id="email" name="email" placeholder="请输入邮箱" style="border:1px solid #c9c9c9;width: 292px;height: 42px;font-size: 16px;text-indent: 22px;" class="left_yh">
+            </div>
+            <p class="font14 c_66" style="text-indent: 500px;margin-top: 30px;">
+                <input id="checkBox" type="checkbox">我已阅读并同意<a href="#" class="red">《会员注册协议》</a>和<a href="#" class="red">《隐私保护政策》</a>
+            </p>
+            <input type="submit" value="注册" class="ipt_tj" style="width: 295px;height: 44px;margin-left: 500px;">
+            <a class="ipt_tj" style="width: 295px;height: 44px;margin-left: 500px;" th:href="@{/login}">已有账号？立即登录</a>
+        </form>
+    </div>
+</div>
+<!--引入尾部-->
+<div th:replace="common/foot::#foot"></div>
+</body>
+</html>

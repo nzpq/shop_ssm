@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div  class="left_yh font16" id="pageNav">
+        <a th:href="@{/shop/}">首页</a>
+        <a th:href="@{/userMsg/findNoticeList}">公告</a>
+        <a th:href="@{/userMsg/toAddMessage}">留言</a>
+    </div>
+
+    <div id="vipNav">
+        <a th:href="@{/userMsg/myCenter}" th:calss="${uri == 'center' ? 'on' : ''}">个人信息</a>
+        <a th:href="@{/commodity/findMyOrder}">我的订单</a>
+        <a th:href="@{/commodity/showFavorite}" th:calss="${uri == 'favorite' ? 'on' : ''}">商品收藏</a>
+        <a th:href="@{/toUpdatePass}">修改密码</a>
+    </div>
+</body>
+</html>

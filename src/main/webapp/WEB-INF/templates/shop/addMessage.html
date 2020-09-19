@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+    <script>
+
+
+        //校验昵称
+        function checkRealName() {
+            var name = $("#name").val();
+
+            var flag = true;
+            if(name.length == 0 || "" == name){
+                flag=false;
+            }
+            if(flag){
+                //昵称不为空
+                $("#name").css("border","");
+            }else{
+                //验证码为空
+                alert("昵称不能为空！");
+                $("#name").css("border","1px solid red");
+            }
+
+            return flag;
+        }
+
+
+
+        //校验手机号
+        function checkTelephone(){
+            var telephone = $("#phone").val();
+            var reg_telephone = /^1[3456789]\d{9}$/;
+            var flag =  reg_telephone.test(telephone);
+            if(flag){
+                //用户名合法
+                $("#phone").css("border","");
+            }else{
+                //用户名非法
+                alert("请输入正确的手机号！");
+                $("#phone").css("border","1px solid red");
+            }
+            return flag;
+        }
+
+        //校验昵称
+        function checkContent() {
+            var content = $("#content").val();
+
+            var flag = true;
+            if(content.length == 0 || "" == content){
+                flag=false;
+            }
+            if(flag){
+                //昵称不为空
+                $("#content").css("border","");
+            }else{
+                //验证码为空
+                alert("内容不能为空！");
+                $("#content").css("border","1px solid red");
+            }
+
+            return flag;
+        }
+
+
+        function formSubmin (){
+            if(checkRealName() && checkTelephone() && checkContent()){
+                return true;
+            }
+            return false;
+        }
+
+
+
+
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div th:replace="common/top::#top"></div>
+<!--导航条-->
+<div class="width100" style="height: 45px;background: #dd4545;margin-top: 40px;position: relative;z-index: 100;">
+    <!--中间的部分-->
+    <div class="width1200 center_yh relative_yh" style="height: 45px;">
+        <!--引入普通导航栏-->
+        <div th:replace="common/bar::#pageNav"></div>
+    </div>
+</div>
+
+<div class="width1200 center_yh hidden_yh font14" style="height: 40px;line-height: 40px;">
+</div>
+<div class="width100 hidden_yh" style="background: #f0f0f0;padding-top:34px;padding-bottom: 34px;">
+    <div class="width1200 hidden_yh center_yh">
+        <div id="vipRight" style="height: 60px;line-height: 60px;text-indent: 50px; background: #f5f8fa;width: 1200px;border:1px solid #ddd;">
+            提交留言
+        </div>
+        <form onsubmit="return formSubmin()" method="post" th:action="@{/userMsg/addMessage}">
+            <div class="bj_fff hidden_yh" style="width: 1200px;border: 1px solid #ddd; margin-top: 30px;padding: 50px;">
+                <div class="width100" style="height: 32px;line-height: 32px;">
+                    <div class="left_yh fon16 tright" style="width:120px;"><font class="red">*</font>姓名： </div>
+                    <input type="text" name="name" id="name" style="width: 243px;border: 1px solid #ddd; outline: none;height: 30px;text-indent: 10px;">
+                </div>
+                <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                    <div class="left_yh fon16 tright" style="width:120px;"><font class="red">*</font>手机号： </div>
+                    <input type="text" name="phone" id="phone" style="width: 243px;border: 1px solid #ddd; outline: none;height: 30px;text-indent: 10px;">
+                </div>
+                <div class="width100" style="height: 100px;line-height: 100px;margin-top: 25px;">
+                    <div class="left_yh fon16 tright" style="width:120px;"><font class="red">*</font>内容： </div>
+                    <textarea  rows="10" name="content" cols="60" id="content" style="width: 300px;border: 1px solid #ddd;outline: none;height: 100px;text-indent: 10px;"></textarea>
+                </div>
+                <div class="width100" style="height: 32px;line-height: 32px;margin-top: 25px;">
+                    <input type="submit" class="left_yh block_yh font16 tcenter ff5802 con" style="width: 244px;height: 33px;line-height: 33px;margin-left:120px;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--引入尾部-->
+<div th:replace="common/foot::#foot"></div>
+
+</body>
+
+</html>

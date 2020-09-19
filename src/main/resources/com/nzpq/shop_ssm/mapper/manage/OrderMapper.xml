@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.manage.OrderMapper">
+
+    <select id="findAll" resultType="com.nzpq.shop_ssm.pojo.ItemOrder" parameterType="String">
+        select * from item_order
+        <if test="code != null">
+            where code = #{code}
+        </if>
+    </select>
+
+    <select id="findUserById" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.User">
+        select * from user where id = #{user_id}
+    </select>
+
+    <update id="sendGoods" parameterType="Integer">
+        update item_order set status = 2 where id = #{id}
+    </update>
+
+    <select id="findOrderDetail" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.OrderDetail">
+        select * from order_detail where order_id = #{id}
+    </select>
+
+    <select id="findItemById" resultType="com.nzpq.shop_ssm.pojo.Item" parameterType="Integer">
+        select * from item where id = #{itemId}
+    </select>
+</mapper>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="../../../static/css/pintuer.css">
+    <link rel="stylesheet" href="../../../static/css/admin.css">
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="padding border-bottom">
+        <ul class="search" style="padding-left: 10px;">
+            <li>
+                <a class="button border-main icon-plus-square-o" th:href="@{/item/toAddCategory2(pid=${id})}">新增二级分类</a>
+            </li>
+        </ul>
+    </div>
+    <table class="table table-hover text-center">
+        <tr>
+            <th>ID</th>
+            <th>类别名称</th>
+            <th>操作</th>
+        </tr>
+
+            <tr th:each="item:${info.list}">
+                <td th:text="${item.id}">二级分类id</td>
+                <td th:text="${item.name}">二级分类name</td>
+                <td>
+                    <div class="button-group">
+                        <a class="button border-main" th:href="@{/item/findOneItemCategory(id=${item.id})}"><span class="icon-edit">修改</span> </a>
+                        <a class="button border-red" th:href="@{/item/deleteItemCategory(id=${item.id})}"><span class="icon-trash-o">删除</span> </a>
+                    </div>
+                </td>
+            </tr>
+
+        <tr>
+            <td colspan="8">
+                <div class="pagelist">
+                    <!--分页开始-->
+                        共 [[${info.pages}]] 页，
+                        共 [[${info.total}]] 记录，
+                        当前第 [[${info.pageNum}]] 页
+
+                            <a th:href="@{/item/findAll(page=1,size=5)}">首页</a>
+
+                            <a th:href="@{/item/findAll(page=${info.pageNum-1},size=5)}">上一页</a>
+                            <a th:href="@{/item/findAll(page=${info.pageNum+1},size=5)}">下一页</a>
+
+                            <a th:href="@{/item/findAll(page=${info.pages},size=5)}">尾页</a>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

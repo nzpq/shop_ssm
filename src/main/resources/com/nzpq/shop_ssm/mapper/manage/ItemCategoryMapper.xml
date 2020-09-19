@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nzpq.shop_ssm.mapper.manage.ItemCategoryMapper">
+
+    <select id="findAll"  resultType="com.nzpq.shop_ssm.pojo.ItemCategory">
+        select * from item_category where pid is null and isDelete = 0
+    </select>
+
+    <select id="findAll2Level"  resultType="com.nzpq.shop_ssm.pojo.ItemCategory" parameterType="Integer">
+        select * from item_category where pid = #{id} and isDelete = 0
+    </select>
+
+    <!--useGeneratedKeys="true" keyProperty="id" 自增时，自动添加主键-->
+    <insert id="addItemCategory" parameterType="com.nzpq.shop_ssm.pojo.ItemCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into item_category(id,name,pid,isDelete) values (#{id},#{name},#{pid},#{isDelete});
+    </insert>
+
+    <select id="findOneItemCategory" parameterType="Integer" resultType="com.nzpq.shop_ssm.pojo.ItemCategory">
+        select * from item_category where  id = #{id}
+    </select>
+
+    <update id="updateItemCategory" parameterType="com.nzpq.shop_ssm.pojo.ItemCategory">
+        update item_category set name = #{name} where id = #{id}
+    </update>
+
+    <update id="deleteItemCategory" parameterType="Integer">
+        update item_category set isDelete = 1 where id = #{id} or pid = #{id}
+    </update>
+
+    <select id="findAll2_Level"  resultType="com.nzpq.shop_ssm.pojo.ItemCategory">
+        select * from item_category where pid is not null and isDelete = 0
+    </select>
+</mapper>

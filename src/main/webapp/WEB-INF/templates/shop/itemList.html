@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th= "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link type="text/css" rel="stylesheet" href="../../../static/user/css/style.css">
+    <script src="../../../static/user/js/jquery-1.8.3.min.js"></script>
+    <script src="../../../static/user/js/jquery.luara.0.0.1.min.js"></script>
+</head>
+<body>
+<div>
+    <!--引入头部-->
+    <div th:replace="common/top::#top">
+</div>
+<!--导航条-->
+<div class="width100" style="height: 45px;background: #dd4545;margin-top: 40px;position: relative;z-index: 100;">
+    <!--中间的部分-->
+    <div class="width1200 center_yh relative_yh" style="height: 45px;">
+        <!--引入普通导航栏-->
+        <div th:replace="common/bar::#pageNav"></div>
+    </div>
+</div>
+
+<div class="width1200 center_yh hidden_yh font14" style="height: 40px;line-height: 40px;">
+    <span>当前位置：</span><a href="#" class="c_66">首页</a>><a href="#" class="c_66">商品列表</a>
+</div>
+<div class="width1198 center_yh" style="height: 35px;background: #f0f0f0; border: 1px solid #ddd;margin-top:25px;" >
+    <a th:href="@{/www.baidu.com}" class="mR">默认</a>
+    <a th:href="@{/www.baidu.com}" class="mR">
+        价格
+        <img src="../../../static/user/images/gg.png" alt="">
+    </a>
+    <a th:href="@{/www.baidu.com}" class="mR">
+        销量
+        <img src="../../../static/user/images/gg.png" alt="">
+    </a>
+
+</div>
+<!--商品列表-->
+<div class="width1200 center_yh hidden_yh" style="margin-top: 25px;">
+    <ul class="listSs">
+
+            <li th:each="item:${list}">
+                <a th:href="@{/commodity/findItemDetail(id=${item.id})}" class="bjK">
+                    <img th:src="${item.url1}" alt="">
+                </a>
+                <h3 class="spName">[[${item.name}]]</h3>
+                <p class="center_yh block_yh hidden_yh" style="width: 202px;">
+                    <font class="left_yh red font16">￥[[${item.price}]]</font>
+
+                        <font class="right_yh font14" th:id="${item.zk} != null">
+                            [[${item.zk}]]
+                            <span style="color: red">折</span>
+                        </font>
+
+                </p>
+                <div class="wCa">
+                    <a th:href="@{/commodity/addFavorite(itemId=${item.id})}" class="fav">
+                        <div class="wCa1">
+                            <b><img src="../../../static/user/images/star.png" alt=""></b>
+                            <font>收藏</font>
+                        </div>
+                    </a>
+
+                    <a th:href="@{/commodity/addCar(itemId=${item.id})}" class="fav">
+                    <div class="wCa2" >
+                        <b><img src="../../../static/user/images/sar.png" alt=""></b>
+                        <font>加入购物车</font>
+                    </div>
+                    </a>
+                </div>
+            </li>
+
+    </ul>
+</div>
+<div id="navs">
+    <div class="pagelist">
+        <!--分页开始-->
+
+    </div>
+</div>
+
+<!--引入尾部-->
+    <div>
+        <div th:replace="common/foot::#foot"></div>
+    </div>
+
+</div>
+</body>
+</html>
